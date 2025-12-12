@@ -1,27 +1,55 @@
-import React, { useState } from "react";
-import Carte from "./components/Carte";
-import InfoPanel from "./components/InfoPanel";
-import Panneau from "./components/Panneau";
-import "./index.css";
+import React, { useRef } from "react";
+import Map from "./components/Map";
+import "./App.css";
 
 function App() {
-  const [map, setMap] = useState(null);
+  const mapRef = useRef(null);
 
   return (
-    <div>
-      {/* Wrapper plein écran pour la carte */}
-      <div
-        id="map-wrapper"
-        style={{ width: "100%", height: "100vh", position: "relative", zIndex: 0 }}
-      >
-        <Carte setMap={setMap} />
-      </div>
+    <div className="layout">
+      <aside className="sidebar">
+        <h2>Contrôles</h2>
+        <hr className="separator" />
+        <button className="btn-primary"
+          onClick={() => mapRef.current?.flyTo({
+            center: [2.3522, 48.8566],
+            zoom: 12
+          })}
+        >
+          Zoom Paris
+        </button>
 
-      {/* Panneau info */}
-      {map && <InfoPanel map={map} />}
+        <hr className="separator" />
+        <button className="btn-primary"
+          onClick={() => mapRef.current?.flyTo({
+            center: [-54.067995 , -13.102886],
+            zoom: 4
+          })}
+        >
+          Zoom vers Bresil
+        </button>
 
-      {/* Panneau droit */}
-      <Panneau />
+
+        <hr className="separator" />
+        <button className="btn-primary"
+          onClick={() => {
+            const visibility = mapRef.current
+              ?.getLayoutProperty("v3-lite-landuse", "visibility");
+
+            mapRef.current?.setLayoutProperty(
+              "v3-lite-landuse",
+              "visibility",
+              visibility === "none" ? "visible" : "none"
+            );
+          }}
+        >
+          Afficher landuse
+        </button>
+      </aside>
+
+      <main className="map-area">
+        <Map onMapReady={(map) => (mapRef.current = map)} />
+      </main>
     </div>
   );
 }
