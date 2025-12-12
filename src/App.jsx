@@ -9,6 +9,7 @@ function App() {
     <div className="layout">
       <aside className="sidebar">
         <h2>Contrôles</h2>
+        
         <hr className="separator" />
         <button className="btn-primary"
           onClick={() => mapRef.current?.flyTo({
